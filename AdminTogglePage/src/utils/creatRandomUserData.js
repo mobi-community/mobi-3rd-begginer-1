@@ -84,7 +84,7 @@ const creatRandomLastLoginRecords = () => {
   const getDay = () => {
     const getDay = getRandomNumber(1, 31)
     if (getDay < 10) {
-      const stringDay = "0" + String(getMonth)
+      const stringDay = "0" + String(getDay)
       return stringDay
     }
     const stringDay = String(getDay)
