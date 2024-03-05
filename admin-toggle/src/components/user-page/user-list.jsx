@@ -14,12 +14,12 @@ const UserList = ({ userPerPage, userData }) => {
     return (
         <Container>
             {currentUser.map((user, index) => (
-                <div key={index}>
+                <UserBox key={index}>
                     <p>{user.name}</p>
                     <p>{user.birthday}</p>
                     <p>{HideNumber(user.phone_number)}</p>
                     <p>{user.last_login}</p>
-                </div>
+                </UserBox>
             ))}
         </Container>
     );
@@ -28,6 +28,11 @@ export default UserList;
 
 const Container = styled.div`
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 20px;
+`;
+
+const UserBox = styled.div`
+    padding: 4px;
+    border: 1px solid #ccc;
 `;

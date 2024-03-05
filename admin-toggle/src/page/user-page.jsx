@@ -52,7 +52,7 @@ const UserPagenation = () => {
             </SelectPerPageBox>
             <Wrapper>
                 <UserList userPerPage={userPerPage} userData={userData} />
-                <Pagination userData={userData} userPerPage={userPerPage} />
+                <Pagination userPerPage={userPerPage} userData={userData} />
             </Wrapper>
         </>
     );
@@ -74,22 +74,3 @@ const Wrapper = styled.div`
     align-items: center;
     flex-direction: column;
 `;
-
-// const PageNumber = styled.div`
-//     display: flex;
-//     justify-content: center;
-// `;
-
-// const Ul = styled.ul`
-//     display: flex;
-//     flex-direction: row;
-//     list-style: none;
-// `;
-
-// const Li = styled.li`
-//     padding: 0 4px;
-// `;
-
-// const Button = styled.button`
-//     cursor: pointer;
-// `;
