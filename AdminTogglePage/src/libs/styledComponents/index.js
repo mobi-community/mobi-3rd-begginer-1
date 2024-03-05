@@ -1,3 +1,3 @@
-import GlobalStyles from "./global-styles";
-export * from "./reference-tokens";
-export { GlobalStyles as default };
+import GlobalStyles from "./GlobalStyles"
+export * from "./reference-tokens"
+export { GlobalStyles as default }
