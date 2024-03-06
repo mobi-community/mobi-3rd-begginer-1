@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import UserList from "./user-list";
 
 /**
  * @component
@@ -11,31 +12,31 @@ import styled from "styled-components";
  *
  * @description pagination을 하게해주는 페이지입니다
  */
-const Pagination = ({ userPerPage, userData, sort }) => {
-    const navigate = useNavigate();
-    const { pageNumber } = useParams();
+const Pagination = ({ curPage, setCurpage, userPerPage, userData }) => {
+    const location = useLocation();
     const [currentPage, setCurrentPage] = useState(1);
-    const [page, setPage] = useState(1);
     const perPageGroup = 5;
 
+    const queryParams = new URLSearchParams(location.search);
+
+    const params = Number(queryParams.get("page"));
+
     useEffect(() => {
-        if (pageNumber <= perPageGroup) {
+        if (params <= perPageGroup) {
             setCurrentPage(1);
         }
-        if (pageNumber > perPageGroup) {
+        if (params > perPageGroup) {
             setCurrentPage(2);
         }
-    }, [pageNumber]);
+    }, [params]);
 
     // userData.length를 userPerPage로 나누어서 올림
     const pageCount = Math.ceil(userData.length / userPerPage);
 
-    // pageCount를 perPageGroup로 나눔
-    const totalPageGroup = Math.ceil(pageCount / perPageGroup);
-
     // 받아온 값으로 새로운 주소로 이동
     const paginate = (page) => {
-        navigate(`/user/${page}?per_page=${userPerPage}&sort=${sort}`);
+        curPage.set("page", page);
+        setCurpage(curPage);
     };
 
     const pageNumbers = () => {
@@ -47,7 +48,6 @@ const Pagination = ({ userPerPage, userData, sort }) => {
                 <Button
                     onClick={() => {
                         paginate(index + startPage);
-                        setPage(index + startPage);
                     }}
                 >
                     {index + startPage}
@@ -57,49 +57,49 @@ const Pagination = ({ userPerPage, userData, sort }) => {
     };
 
     const prevPage = () => {
-        if (pageNumber > 1) {
-            const newPage = pageNumber - 1;
+        if (params > 1) {
+            const newPage = params - 1;
             paginate(newPage);
-            setPage(newPage);
         }
     };
 
     const prevGroup = () => {
         paginate(1);
         setCurrentPage(1);
-        setPage(1);
     };
 
     const nextPage = () => {
-        if (pageNumber < pageCount) {
-            const newPage = page + 1;
+        if (params < pageCount) {
+            const newPage = params + 1;
             paginate(newPage);
-            setPage(newPage);
         }
     };
 
     const nextGroup = () => {
-        setCurrentPage(totalPageGroup);
+        paginate(1 + perPageGroup);
     };
 
     return (
-        <PageNumber>
-            <Ul>
-                <Li>
-                    <Button onClick={prevGroup}>&lt;&lt;</Button>
-                </Li>
-                <Li>
-                    <Button onClick={prevPage}>&lt;</Button>
-                </Li>
-                {pageNumbers()}
-                <Li>
-                    <Button onClick={nextPage}>&gt;</Button>
-                </Li>
-                <Li>
-                    <Button onClick={nextGroup}>&gt;&gt;</Button>
-                </Li>
-            </Ul>
-        </PageNumber>
+        <>
+            <UserList userData={userData} userPerPage={userPerPage} />
+            <PageNumber>
+                <Ul>
+                    <Li>
+                        <Button onClick={prevGroup}>&lt;&lt;</Button>
+                    </Li>
+                    <Li>
+                        <Button onClick={prevPage}>&lt;</Button>
+                    </Li>
+                    {pageNumbers()}
+                    <Li>
+                        <Button onClick={nextPage}>&gt;</Button>
+                    </Li>
+                    <Li>
+                        <Button onClick={nextGroup}>&gt;&gt;</Button>
+                    </Li>
+                </Ul>
+            </PageNumber>
+        </>
     );
 };
 export default Pagination;

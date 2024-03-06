@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Main from "../page/main";
-import UserPagenation from "../page/user-page";
+
+import UserPage from "../page/user-page";
 
 const router = createBrowserRouter([
     {
@@ -8,8 +9,8 @@ const router = createBrowserRouter([
         element: <Main />,
     },
     {
-        path: `/user/:pageNumber`,
-        element: <UserPagenation />,
+        path: `/user/`,
+        element: <UserPage />,
     },
 ]);
 export default router;

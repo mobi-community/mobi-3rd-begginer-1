@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { HideNumber } from "../../utils/hide-number";
 
@@ -11,9 +11,9 @@ import { HideNumber } from "../../utils/hide-number";
  * @description user 정보를 list로 보여주는 컴포넌트입니다.
  */
 const UserList = ({ userPerPage, userData }) => {
-    const { pageNumber } = useParams();
-
-    const currentPage = Number(pageNumber) || 1;
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const currentPage = Number(queryParams.get("page"));
 
     const lastUserIndex = currentPage * userPerPage;
     const firstUserIndex = lastUserIndex - userPerPage;

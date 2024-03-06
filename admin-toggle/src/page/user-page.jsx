@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { CreateUserData } from "../utils/user-data";
 import { styled } from "styled-components";
-import UserList from "../components/user-page/user-list";
 import Pagination from "../components/user-page/pagination";
 
 const UserPage = () => {
     const [userData, setUserData] = useState([]);
-    const [userPerPage, setUserPerPage] = useState();
-    const [sort, setSort] = useState("");
-    const navigate = useNavigate();
     const location = useLocation();
+
+    const [searchParams, setSearchParams] = useSearchParams();
 
     // sort button을 보여주기위한 배열
     const sortBtnArr = [
@@ -22,25 +20,23 @@ const UserPage = () => {
 
     const queryParam = new URLSearchParams(location.search);
 
-    // 페이지의 정렬순서를 변경하는 함수
-    const params = (key, value) => {
-        const params = queryParam;
-        // set으로 params에 key와 value 보내줌
-        params.set(key, value);
-        // 현재 페이지의 경로와 업데이트된 queryParam를 새로운 URL로 navigate로 전달
-        navigate(`${location.pathname}?${queryParam.toString()}`);
-    };
-
     useEffect(() => {
         // 마운트 시 랜덤한 user data 200개를 새로 만듦
         setUserData(CreateUserData({ userDataNum: 200 }));
+
+        searchParams.set("page", 1);
+
+        setSearchParams(searchParams);
     }, []);
 
     useEffect(() => {
         const params = queryParam;
         // perPage의 초기값 설정
-        const perPage = params.get("per_page") || 20;
-        setUserPerPage(perPage);
+        const perPage = Number(params.get("per_page") || 20);
+
+        searchParams.set("per_page", perPage);
+        setSearchParams(searchParams);
+        // setUserPerPage(perPage);
 
         // key값 name, birthday...등을 받아와서 정렬해주는 함수
         const sortKeyChange = (key) => {
@@ -64,21 +60,22 @@ const UserPage = () => {
     // event의 target.value값을 params의 key, value로 전달
     const handlePerPageChange = (e) => {
         const newPerPage = e.target.value;
-        params("per_page", newPerPage);
+        searchParams.set("per_page", newPerPage);
+        setSearchParams(searchParams);
     };
 
     // click시 받은 key를 params에 key, value로 전달
     // page 변경 시 주소에 보여주도록 상태로 전달
     const onClickSortKey = (key) => {
-        params("sort", key);
-        setSort(key);
+        searchParams.set("sort", key);
+        setSearchParams(searchParams);
     };
 
     return (
         <>
             <SelectPerPageBox>
                 <SelectPerPage
-                    value={userPerPage}
+                    // value={userPerPage}
                     onChange={handlePerPageChange}
                 >
                     <option value={20}>20</option>
@@ -89,19 +86,19 @@ const UserPage = () => {
                     <SortButton
                         key={index}
                         onClick={() => onClickSortKey(button.key)}
-                        disabled={sort === button.key}
-                        isActive={sort === button.key}
+                        disabled={searchParams.get("sort") === button.key}
+                        isActive={searchParams.get("sort") === button.key}
                     >
                         {button.name}
                     </SortButton>
                 ))}
             </SelectPerPageBox>
             <Wrapper>
-                <UserList userPerPage={userPerPage} userData={userData} />
                 <Pagination
-                    userPerPage={userPerPage}
+                    curPage={searchParams}
+                    setCurpage={setSearchParams}
+                    userPerPage={searchParams.get("per_page")}
                     userData={userData}
-                    sort={sort}
                 />
             </Wrapper>
         </>
