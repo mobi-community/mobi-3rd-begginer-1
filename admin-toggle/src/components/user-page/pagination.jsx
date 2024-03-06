@@ -1,13 +1,24 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-const Pagination = ({ userPerPage, userData }) => {
+/**
+ * @component
+ * @parameter userPerPage: number - 현재 페이지의 번호를 받아옵니다
+ * @parameter userData: Array<Object> - 전체 유저의 데이터를 받아옵니다
+ * @parameter sort: string - 현재 정렬의 값을 받아옵니다
+ * @returns {JSX.Element}
+ *
+ * @description pagination을 하게해주는 페이지입니다
+ */
+const Pagination = ({ userPerPage, userData, sort }) => {
     const navigate = useNavigate();
 
+    // 받아온 값으로 새로운 주소로 이동
     const paginate = (page) => {
-        navigate(`/user/${page}?per_page=${userPerPage}`);
+        navigate(`/user/${page}?per_page=${userPerPage}&sort=${sort}`);
     };
 
+    // userData.length를 userPerPage로 나누어서 올림
     const pageCount = Math.ceil(userData.length / userPerPage);
 
     return (

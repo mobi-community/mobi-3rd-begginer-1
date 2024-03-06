@@ -2,6 +2,14 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { HideNumber } from "../../utils/hide-number";
 
+/**
+ * @component
+ * @parameter userPerPage: number - 현재 페이지의 번호를 받아옵니다
+ * @parameter userData: Array<Object> - 전체 유저의 데이터를 받아옵니다
+ * @returns {JSX.Element}
+ *
+ * @description user 정보를 list로 보여주는 컴포넌트입니다.
+ */
 const UserList = ({ userPerPage, userData }) => {
     const { pageNumber } = useParams();
 
