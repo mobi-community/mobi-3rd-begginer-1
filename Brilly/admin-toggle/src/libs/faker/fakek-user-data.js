@@ -13,8 +13,8 @@ export const users = Array.from({ length: 200 }, (_, index) => {
   const randomNumberLast = Math.floor(Math.random() * 10000).toString();
   const phone = `010-${randomNumberMid.padStart(
     4,
-    "4"
-  )}-${randomNumberLast.padStart(4, "4")}`;
+    "0"
+  )}-${randomNumberLast.padStart(4, "0")}`;
   const lastLogin = new Date(faker.date.recent().toString());
   const formattedLastLogin = `${lastLogin.getFullYear()}.${(
     lastLogin.getMonth() + 1

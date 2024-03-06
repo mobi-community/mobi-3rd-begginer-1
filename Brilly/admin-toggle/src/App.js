@@ -1,9 +1,5 @@
-import "./App.css";
-
-import TableList from "./components/table-list";
-
-function App() {
-  return <TableList />;
-}
+const App = () => {
+  return <div className="App">App.js</div>;
+};
 
 export default App;
