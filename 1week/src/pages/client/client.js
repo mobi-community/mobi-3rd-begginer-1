@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { UserData } from "../../data/userData";
 import ClientLst from "./components/clientList";
 import { styled } from "styled-components";
@@ -6,11 +6,28 @@ import { useSearchParams } from "react-router-dom";
 import Pagination from "../../components/pagination";
 
 const ClientPage = () => {
-  const userList = UserData(200);
-  // console.log(userList);
+  const userList = useMemo(() => UserData(200), []);
   const totalLength = userList.length;
   const [userDataList, setUserDataList] = useState(userList);
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const userListSlice = (startIdx, endIdx) => {
+    const listSlice = userList.slice(
+      (startIdx - 1) * endIdx,
+      endIdx * startIdx
+    );
+    // slice(20*(1-1),20)
+    // slice(20*(2-1) ,20*2)
+    // slice(40*(3-1) ,20*3)
+    // .....
+    // slice(endIdx*(n="page"-1) ,20*n="page")
+    return listSlice;
+  };
+  useEffect(() => {
+    setUserDataList(
+      userListSlice(+searchParams.get("page"), +searchParams.get("perPage"))
+    );
+  }, [searchParams]);
   /*
   1. useEffect 처음 화면이 열렸을때에 
   2. set을 사용하여 page와 perPage의 value를 설정
