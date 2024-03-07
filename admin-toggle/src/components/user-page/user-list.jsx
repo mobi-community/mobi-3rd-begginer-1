@@ -23,6 +23,7 @@ const UserList = ({ userPerPage, userData }) => {
         <Container>
             {currentUser.map((user, index) => (
                 <UserBox key={index}>
+                    <p>{user.user_id}</p>
                     <p>{user.name}</p>
                     <p>{user.birthday}</p>
                     <p>{HideNumber(user.phone_number)}</p>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import UserList from "./user-list";
 
@@ -17,8 +17,9 @@ const Pagination = ({ curPage, setCurpage, userPerPage, userData }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const perPageGroup = 5;
 
+    // ?page=1&per_page=20 --- queryString
     const queryParams = new URLSearchParams(location.search);
-
+    // 1
     const params = Number(queryParams.get("page"));
 
     useEffect(() => {
@@ -33,7 +34,6 @@ const Pagination = ({ curPage, setCurpage, userPerPage, userData }) => {
     // userData.length를 userPerPage로 나누어서 올림
     const pageCount = Math.ceil(userData.length / userPerPage);
 
-    // 받아온 값으로 새로운 주소로 이동
     const paginate = (page) => {
         curPage.set("page", page);
         setCurpage(curPage);
@@ -49,6 +49,7 @@ const Pagination = ({ curPage, setCurpage, userPerPage, userData }) => {
                     onClick={() => {
                         paginate(index + startPage);
                     }}
+                    $isActive={params === index + startPage}
                 >
                     {index + startPage}
                 </Button>
@@ -121,4 +122,14 @@ const Li = styled.li`
 
 const Button = styled.button`
     cursor: pointer;
+    background-color: ${(props) =>
+        props.$isActive ? "#007bff" : "transparent"};
+    color: ${(props) => (props.$isActive ? "#fff" : "#000")};
+    border: ${(props) => (props.$isActive ? "1px solid #005bff" : "#ddd")};
+    border-radius: 4px;
+
+    &:hover {
+        background-color: ${(props) =>
+            props.$isActive ? "#0056b3" : "#f8f9fa"};
+    }
 `;
