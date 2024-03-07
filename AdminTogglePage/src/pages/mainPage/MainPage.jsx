@@ -1,9 +1,10 @@
 import styled from "styled-components"
 import { creatRandomUserData } from "../../utils/creatRandomUserData"
-import { PageNationBtn, UserTable } from "./components"
+import { OptionList, PageNationBtn, UserTable } from "./components"
 import { useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { editUserDataByPerPage } from "../../utils/dataEditor"
+import { URL_KEY } from "../../const"
 
 const MainPage = () => {
   const mockData = useMemo(() => creatRandomUserData(250), [])
@@ -11,19 +12,20 @@ const MainPage = () => {
   const [userData, setUserData] = useState([])
 
   useEffect(() => {
-    urlParams.set("page", 1)
-    urlParams.set("perPage", 20)
+    urlParams.set(URL_KEY.PAGE, 1)
+    urlParams.set(URL_KEY.PER_PAGE, 20)
     setUrlParams(urlParams)
   }, [])
 
   useEffect(() => {
-    const page = +urlParams.get("page")
-    const perPage = +urlParams.get("perPage")
+    const page = +urlParams.get(URL_KEY.PAGE)
+    const perPage = +urlParams.get(URL_KEY.PER_PAGE)
     setUserData(editUserDataByPerPage(mockData, page, perPage))
   }, [urlParams])
-  
+
   return (
     <S.CenterWrapper>
+      <OptionList urlParams={urlParams} setUrlParams={setUrlParams} />
       <UserTable userData={userData} />
       <PageNationBtn
         urlParams={urlParams}

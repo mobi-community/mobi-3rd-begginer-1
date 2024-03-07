@@ -4,14 +4,17 @@ import {
   FONT_SIZE,
 } from "../../../libs/styledComponents/referenceTokens"
 import { useEffect, useState, useRef } from "react"
+import { URL_KEY } from "../../../const"
 
 const PageNationBtn = ({ urlParams, setUrlParams, totalPageLength }) => {
-  const totalPage = Math.ceil(totalPageLength / +urlParams.get("perPage"))
+  const totalPage = Math.ceil(
+    totalPageLength / +urlParams.get(URL_KEY.PER_PAGE)
+  )
   const [pageBtn, setPageBtn] = useState([1, 2, 3, 4, 5])
   const pageIdxRef = useRef(1)
 
   useEffect(() => {
-    const page = +urlParams.get("page")
+    const page = +urlParams.get(URL_KEY.PAGE)
     pageIdxRef.current = page
     if (page < 5) return setPageBtn([1, 2, 3, 4, 5])
     if (page % 5 === 1) {
@@ -37,24 +40,24 @@ const PageNationBtn = ({ urlParams, setUrlParams, totalPageLength }) => {
 
   const onClickEndBtn = () => {}
   const onClickStartBtn = () => {
-    urlParams.set("page", 1)
+    urlParams.set(URL_KEY.PAGE, 1)
     setUrlParams(urlParams)
   }
 
   const onClickPrevBtn = () => {
-    const prevPage = +urlParams.get("page")
+    const prevPage = +urlParams.get(URL_KEY.PAGE)
     if (prevPage <= 1) return
-    urlParams.set("page", +prevPage - 1)
+    urlParams.set(URL_KEY.PAGE, +prevPage - 1)
     setUrlParams(urlParams)
   }
   const onClickNextBtn = () => {
-    const prevPage = +urlParams.get("page")
+    const prevPage = +urlParams.get(URL_KEY.PAGE)
     if (prevPage + 1 > totalPage) return
-    urlParams.set("page", +prevPage + 1)
+    urlParams.set(URL_KEY.PAGE, +prevPage + 1)
     setUrlParams(urlParams)
   }
   const onClickNumBtn = (btn) => {
-    urlParams.set("page", +btn.target.id)
+    urlParams.set(URL_KEY.PAGE, +btn.target.id)
     setUrlParams(urlParams)
   }
   return (
@@ -65,7 +68,7 @@ const PageNationBtn = ({ urlParams, setUrlParams, totalPageLength }) => {
         {pageBtn.map((number) => (
           <S.NumBtn
             key={number}
-            $urlParamsIdx={+urlParams.get("page") === number}
+            $urlParamsIdx={+urlParams.get(URL_KEY.PAGE) === number}
             id={number}
             onClick={(e) => {
               onClickNumBtn(e)

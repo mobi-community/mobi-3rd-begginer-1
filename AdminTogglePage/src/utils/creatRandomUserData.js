@@ -1,4 +1,4 @@
-import { ALPHABET } from "../const/ALPHABET"
+import { ALPHABET } from "../const"
 
 /**
  * @param startNumber - number : 랜덤한숫자생성의 시작숫자(정수로)
