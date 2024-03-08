@@ -1,8 +1,8 @@
 function Page() {
     return (
         <>
-            <button>Click Me</button>
-            <button>Click Me</button>
+            <button>버튼</button>
+            <button>버튼</button>
         </>
     );
 }
