@@ -1,4 +1,10 @@
+import ToggleMenu from "../components/toggle-menu";
+
 const Header = () => {
-	return <></>;
+  return (
+    <>
+      <ToggleMenu />
+    </>
+  );
 };
 export default Header;
