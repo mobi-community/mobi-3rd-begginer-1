@@ -1,12 +1,8 @@
 import { useEffect } from "react";
 import { FilterTypeSelect } from "../consts/filterType";
+import { useSearchParams } from "react-router-dom";
 
-const FilterPage = ({
-  searchParams,
-  setSearchParams,
-  userDataList,
-  setUserDataList,
-}) => {
+const FilterPage = ({ userList }) => {
   /*
 1. 50개를 클릭했을때 client.js/userListSlice에 실행되고있는 perPage에 값이 50으로 변경해주기
 => 문제점 : 다른 value를 눌러도 모두 perPage로 들어간다 
@@ -16,22 +12,20 @@ const FilterPage = ({
 4. 이름순을 클릭하게되면 
 
 */
-  const filter = searchParams.get("filter");
+  const [searchParams, setSearchParams] = useSearchParams();
   //이름 순 정렬 함수
   const sortByName = () => {
-    return userDataList.sort((a, b) => a.name.localeCompare(b.name));
+    return userList.sort((a, b) => a.name.localeCompare(b.name));
     //userDataList.sort((a, b) => a.name.localeCompare(b.name))
     // 솔트를 해줄거야 아니야..
   };
 
   const onChangeTypeOption = (e) => {
     const value = e.target.value;
-    if (value === "이름순") {
-      setUserDataList(sortByName());
-    }
+    console.log(e.target.name);
     //위에껀 하다 만거라서 ㅎㅎㅎ..
     setSearchParams((prev) => {
-      prev.set("perPage", value);
+      prev.set(e.target.name, value);
       return prev;
     });
     //이것때문인것 같은데...
