@@ -91,15 +91,9 @@ function App() {
 
     const handleSelectChange = (e) => {
         setUserPerPage(parseInt(e.target.value, 10));
-        setCurrentPage(1); // 페이지 수 변경 시 첫 페이지로 리셋
+        setCurrentPage(1);
         history.push(`/users/1/${e.target.value}`);
     };
-
-    /*빈배열을 넣고  내가 원하는 건 배열안에 최대 5개 만들어갈수있게 하기 (5개 이하면 나오질 안겠지 애초에)
-     * 첫번째 페이지는 max = currenPage-2 min = currentPage
-     * 마지막 페이지도 max = currentPage min = currentPage+2
-     *
-     */
 
     return (
         <div>
