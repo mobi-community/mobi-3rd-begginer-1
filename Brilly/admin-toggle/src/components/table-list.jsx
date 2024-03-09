@@ -11,54 +11,72 @@ import React, { useState } from "react";
 import { users as usersData } from "../libs/faker/fakek-user-data";
 import { styled } from "styled-components";
 import Pagination from "./pagination";
+import { useSearchParams } from "react-router-dom";
 
 // 테이블 리스트 컴포넌트
 const TableList = () => {
   const [users, setUsers] = useState([...usersData]);
-  const viewCount = [20, 50];
-  const [perPage, setPerPage] = useState(20); // 페이지당 갯수
-  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
+  const [searchParams, setSearchParams] = useSearchParams();
+  const viewCount = [20, 50]; // 옵션 : 페이지당 갯수
+  const [perPage, setPerPage] = useState(
+    parseInt(searchParams.get("perPage")) || 20
+  ); // 페이지당 갯수
+  const [currentPage, setCurrentPage] = useState(
+    parseInt(searchParams.get("page")) || 1
+  ); // 현재 페이지
   const TotalPage = Math.ceil(users.length / perPage); // 전체 페이지
   const [sortDirection, setSortDirection] = useState("asc"); // 정렬 방향
 
+  // phoneNumber 가운데 4자리  *로 파싱
   const parsePhone = (phoneNumber) => {
     const parseNumber = phoneNumber.substring(4, 8).replace(/\d/g, "*");
     return `010-${parseNumber}-${phoneNumber.substring(9)}`;
   };
 
+  // perPage 갯수에 따라 페이지네이션에 보여질 페이지의 처음과 끝 index
   const getUsersForPage = (page) => {
     const startIndex = (page - 1) * perPage;
     const endIndex = startIndex + perPage;
     return users.slice(startIndex, endIndex);
   };
 
+  // selectOption으로 perPage 갯수 설정
   const handleSelected = (e) => {
-    setPerPage(e.target.value);
+    const perPageValue = parseInt(e.target.value);
+    setPerPage(perPageValue);
+    setSearchParams({ perPage: perPageValue, page: 1 });
+    setCurrentPage(1);
   };
 
   // 이전 페이지로 이동하는 함수
   const goToPrevPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+    setSearchParams({ ...searchParams, page: currentPage });
   };
 
   // 이전 5개 페이지로 이동하는 함수
   const goToPrevUnitPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 5, 1));
+    setSearchParams({ ...searchParams, page: currentPage - 5 });
   };
 
   // 다음 페이지로 이동하는 함수
   const goToNextPage = () => {
     setCurrentPage((prevPage) => Math.min(prevPage + 1, TotalPage));
+    setSearchParams({ ...searchParams, page: currentPage });
   };
   // 다음 5개 페이지로 이동하는 함수
   const goToNextUnitPage = () => {
     setCurrentPage((prevPage) => Math.min(prevPage + 5, TotalPage));
+    setSearchParams({ ...searchParams, page: currentPage + 5 });
   };
   // 특정 페이지로 이동하는 함수
   const goToPage = (page) => {
     setCurrentPage(page);
+    setSearchParams({ ...searchParams, page: page });
   };
 
+  // userTable 정렬 방법
   const toggleSortDirection = () => {
     setSortDirection((prevDirection) =>
       prevDirection === "asc" ? "desc" : "asc"
@@ -67,9 +85,9 @@ const TableList = () => {
 
   const sortByName = (a, b) => {
     if (sortDirection === "asc") {
-      return a.fullName.localeCompare(b.fullName); // 문자열 비교로 변경
+      return a.fullName.localeCompare(b.fullName);
     } else {
-      return b.fullName.localeCompare(a.fullName); // 문자열 비교로 변경
+      return b.fullName.localeCompare(a.fullName);
     }
   };
 
@@ -149,7 +167,6 @@ const TableList = () => {
         </S.TBody>
       </S.Table>
       <Pagination
-        currentPage={currentPage}
         TotalPage={TotalPage}
         goToPrevUnitPage={goToPrevUnitPage}
         goToPrevPage={goToPrevPage}
@@ -165,7 +182,7 @@ export default TableList;
 
 const Wrapper = styled.div`
   display: block;
-  margin-left: 10%;
+  margin-left: 20%;
 `;
 
 const SelectOption = styled.select``;
