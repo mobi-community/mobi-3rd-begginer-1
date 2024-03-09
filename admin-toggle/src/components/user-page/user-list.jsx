@@ -1,4 +1,3 @@
-import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { HideNumber } from "../../utils/hide-number";
 
@@ -10,10 +9,8 @@ import { HideNumber } from "../../utils/hide-number";
  *
  * @description user 정보를 list로 보여주는 컴포넌트입니다.
  */
-const UserList = ({ userPerPage, userData }) => {
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const currentPage = Number(queryParams.get("page"));
+const UserList = ({ userPerPage, userData, curPage }) => {
+    const currentPage = Number(curPage.get("page"));
 
     const lastUserIndex = currentPage * userPerPage;
     const firstUserIndex = lastUserIndex - userPerPage;
@@ -39,9 +36,25 @@ const Container = styled.div`
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
+
+    @media (max-width: 970px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    @media (max-width: 790px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @media (max-width: 650px) {
+        grid-template-columns: repeat(1, 1fr);
+    }
 `;
 
 const UserBox = styled.div`
     padding: 4px;
-    border: 1px solid #ccc;
+    background-color: #747264;
+    color: #000;
+    border-radius: 4px;
+    @media (max-width: 650px) {
+        grid-template-columns: repeat(1, 1fr);
+        width: 200px;
+    }
 `;

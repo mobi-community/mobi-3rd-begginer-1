@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
-const Main = () => {
+const ProductListPage = () => {
     return (
         <Container>
-            <div>메인 페이지입니다</div>
+            <div>상품목록</div>
         </Container>
     );
 };
-export default Main;
+export default ProductListPage;
 
 const Container = styled.div`
     width: 100%;
