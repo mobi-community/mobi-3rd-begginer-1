@@ -23,22 +23,36 @@ const PageNationBtn = ({ urlParams, setUrlParams, totalPageLength }) => {
       })
     }
     if (page % 5 === 0) {
-      setPageBtn((prev) => {
-        return prev.map((_, idx) => pageIdxRef.current - idx).reverse()
+      setPageBtn(() => {
+        return Array(5)
+          .fill()
+          .map((_, idx) => pageIdxRef.current - idx)
+          .reverse()
       })
     }
-    // if (page % 5 === 0 && totalPage / page < 2) {
-    //   const number = pageIdxRef.current
-    //   const btnLength = (totalPage % 5) + 1
-    //   setPageBtn(() => {
-    //     return Array(btnLength - 1)
-    //       .fill()
-    //       .map((_, idx) => number + idx + 1)
-    //   })
-    // }
+    if (page % 5 === 1 && totalPage / page < 2) {
+      const btnLength = totalPage % 5
+      setPageBtn(() => {
+        return Array(btnLength)
+          .fill()
+          .map((_, idx) => pageIdxRef.current + idx)
+      })
+    }
+    if (page === totalPage) {
+      const btnLength = totalPage % 5
+      setPageBtn(() => {
+        return Array(btnLength)
+          .fill()
+          .map((_, idx) => pageIdxRef.current - idx)
+          .reverse()
+      })
+    }
   }, [urlParams])
 
-  const onClickEndBtn = () => {}
+  const onClickEndBtn = () => {
+    urlParams.set(URL_KEY.PAGE, totalPage)
+    setUrlParams(urlParams)
+  }
   const onClickStartBtn = () => {
     urlParams.set(URL_KEY.PAGE, 1)
     setUrlParams(urlParams)
@@ -65,18 +79,20 @@ const PageNationBtn = ({ urlParams, setUrlParams, totalPageLength }) => {
       <>
         <ArrowBtn onClick={onClickStartBtn}>{"<<"}</ArrowBtn>
         <ArrowBtn onClick={onClickPrevBtn}>{"<"}</ArrowBtn>
-        {pageBtn.map((number) => (
-          <S.NumBtn
-            key={number}
-            $urlParamsIdx={+urlParams.get(URL_KEY.PAGE) === number}
-            id={number}
-            onClick={(e) => {
-              onClickNumBtn(e)
-            }}
-          >
-            {number}
-          </S.NumBtn>
-        ))}
+        <S.NumberWrapper>
+          {pageBtn.map((number) => (
+            <S.NumBtn
+              key={number}
+              $urlParamsIdx={+urlParams.get(URL_KEY.PAGE) === number}
+              id={number}
+              onClick={(e) => {
+                onClickNumBtn(e)
+              }}
+            >
+              {number}
+            </S.NumBtn>
+          ))}
+        </S.NumberWrapper>
         <ArrowBtn onClick={onClickNextBtn}>{">"}</ArrowBtn>
         <ArrowBtn onClick={onClickEndBtn}>{">>"}</ArrowBtn>
       </>
@@ -91,10 +107,14 @@ const BtnWrapper = styled.div`
   position: fixed;
   bottom: 5rem;
 `
-const NumBtn = styled.button`
+const NumberWrapper = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  width: 30rem;
+  gap: 1rem;
+`
+const NumBtn = styled.button`
   background-color: ${({ $urlParamsIdx }) =>
     $urlParamsIdx ? COLOR.THEME.SUB[200] : COLOR.THEME.SUB[900]};
   font-size: ${FONT_SIZE.xl};
@@ -111,4 +131,4 @@ const ArrowBtn = styled.button`
   background-color: ${COLOR.COMMON[1000]};
 `
 
-const S = { BtnWrapper, NumBtn, ArrowBtn }
+const S = { BtnWrapper, NumberWrapper, NumBtn, ArrowBtn }
