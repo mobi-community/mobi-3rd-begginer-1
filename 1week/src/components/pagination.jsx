@@ -91,5 +91,7 @@ const PaginationBtn = styled.div`
 `;
 const Button = styled.button`
   cursor: pointer;
-  background-color: ${({ $seleted }) => ($seleted ? "blue" : "white")};
+  background-color: ${({ $seleted }) => ($seleted ? "black" : "white")};
+  color: ${({ $seleted }) => ($seleted ? "white" : "black")};
+  font-size: large;
 `;

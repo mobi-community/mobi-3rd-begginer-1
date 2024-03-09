@@ -4,6 +4,7 @@ import ClientLst from "./components/clientList";
 import { styled } from "styled-components";
 import { useSearchParams } from "react-router-dom";
 import Pagination from "../../components/pagination";
+import FilterPage from "../../components/filter";
 
 const ClientPage = () => {
   const userList = useMemo(() => UserData(200), []);
@@ -36,6 +37,7 @@ const ClientPage = () => {
   useEffect(() => {
     searchParams.set("page", 1);
     searchParams.set("perPage", 20);
+    searchParams.set("filter", "name");
     setSearchParams(searchParams);
   }, []);
 
@@ -52,6 +54,14 @@ const ClientPage = () => {
   return (
     <Wrapper>
       <h1>회원관리 〉 회원목록</h1>
+      <div>
+        <FilterPage
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+          userDataList={userDataList}
+          setUserDataList={setUserDataList}
+        />
+      </div>
       <Table>
         <thead>
           <tr>
