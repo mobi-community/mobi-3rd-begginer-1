@@ -1,0 +1,50 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+
+	font-family: "KingSejongInstitute";
+	font-size: 1.5rem;
+	font-weight: 300;
+
+	::-webkit-scrollbar {
+		width: 0;
+	}
+}
+html {
+	font-size: 62.5%;
+
+	@media (max-width: 896px) {
+		font-size: 50%;
+	}
+
+	@media (max-width: 1152px) {
+		font-size: 31.25%;
+	}
+}
+h1 {
+	font-weight: 700;
+	font-size: 2.5rem;
+}
+h2 {
+	font-weight: 700;
+	font-size: 2rem;
+}
+h3 {
+	font-weight: 700;
+	font-size: 1.7rem;
+}
+h4 {
+	font-weight: 700;
+	font-size: 1.5rem;
+}
+button {
+	border: none;
+}
+input {
+	outline: none;
+}
+ul,
+li {
+	list-style: none;
+}
