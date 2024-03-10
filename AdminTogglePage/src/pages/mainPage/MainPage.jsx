@@ -7,7 +7,7 @@ import { editUserDataByPerPage } from "../../utils/dataEditor"
 import { URL_KEY } from "../../const"
 
 const MainPage = () => {
-  const mockData = useMemo(() => creatRandomUserData(250), [])
+  const mockData = useMemo(() => creatRandomUserData(270), [])
   const [urlParams, setUrlParams] = useSearchParams()
   const [userData, setUserData] = useState([])
 
