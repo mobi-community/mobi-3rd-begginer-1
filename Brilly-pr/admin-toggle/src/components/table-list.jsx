@@ -1,11 +1,3 @@
-/* 
-**필터링 옵션 만들기**
-
-- 20개씩 보기, 50개씩 보기
-- 이름 순, 마지막 로그인 순, 생년월일 순으로 정렬하기
-- 오름차순 내림차순 정렬하기
-*/
-
 import React, { useState } from "react";
 
 import { users as usersData } from "../libs/faker/fakek-user-data";
