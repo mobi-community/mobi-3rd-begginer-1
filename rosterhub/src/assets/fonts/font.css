@@ -1,0 +1,10 @@
+@font-face {
+	font-family: "KingSejongInstitute";
+	font-weight: 300;
+	src: url("./KingSejongInstitute-Regular.otf") format("otf");
+}
+@font-face {
+	font-family: "KingSejongInstitute";
+	font-weight: 700;
+	src: url("./KingSejongInstitute-Bold.otf") format("otf");
+}
