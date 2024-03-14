@@ -3,103 +3,71 @@ import {
   COLOR,
   FONT_SIZE,
 } from "../../../libs/styledComponents/referenceTokens"
-import { useEffect, useState, useRef } from "react"
 import { URL_KEY } from "../../../const"
 
-const PageNationBtn = ({ urlParams, setUrlParams, totalPageLength }) => {
-  const totalPage = Math.ceil(
-    totalPageLength / +urlParams.get(URL_KEY.PER_PAGE)
-  )
-  const [pageBtn, setPageBtn] = useState([1, 2, 3, 4, 5])
-  const pageIdxRef = useRef(1)
+const PageNationBtn = ({ totalPageLength, urlParams, setUrlParams }) => {
+  const perPage = +urlParams.get(URL_KEY.PER_PAGE)
+  const page = +urlParams.get(URL_KEY.PAGE)
+  const pagenationBtnLength = 5
+  const totalPage = Math.ceil(totalPageLength / perPage)
 
-  useEffect(() => {
-    const page = +urlParams.get(URL_KEY.PAGE)
-    pageIdxRef.current = page
-    if (page < 5) return setPageBtn([1, 2, 3, 4, 5])
-    if (page % 5 === 1) {
-      setPageBtn((prev) => {
-        return prev.map((_, idx) => idx + pageIdxRef.current)
-      })
-    }
-    if (page % 5 === 0) {
-      setPageBtn(() => {
-        return Array(5)
-          .fill()
-          .map((_, idx) => pageIdxRef.current - idx)
-          .reverse()
-      })
-    }
-    if (page % 5 === 1 && totalPage / page < 2) {
-      const btnLength = totalPage % 5
-      setPageBtn(() => {
-        return Array(btnLength)
-          .fill()
-          .map((_, idx) => pageIdxRef.current + idx)
-      })
-    }
-    if (page === totalPage) {
-      const btnLength = totalPage % 5
-      setPageBtn(() => {
-        return Array(btnLength)
-          .fill()
-          .map((_, idx) => pageIdxRef.current - idx)
-          .reverse()
-      })
-    }
-  }, [urlParams])
-
-  const onClickEndBtn = () => {
-    urlParams.set(URL_KEY.PAGE, totalPage)
+  const changeUrl = (urlKey, value) => {
+    urlParams.set(urlKey, value)
     setUrlParams(urlParams)
   }
+
+  const onClickEndBtn = () => {
+    changeUrl(URL_KEY.PAGE, totalPage)
+  }
   const onClickStartBtn = () => {
-    urlParams.set(URL_KEY.PAGE, 1)
-    setUrlParams(urlParams)
+    changeUrl(URL_KEY.PAGE, 1)
   }
 
   const onClickPrevBtn = () => {
     const prevPage = +urlParams.get(URL_KEY.PAGE)
     if (prevPage <= 1) return
-    urlParams.set(URL_KEY.PAGE, +prevPage - 1)
-    setUrlParams(urlParams)
+    changeUrl(URL_KEY.PAGE, prevPage - 1)
   }
   const onClickNextBtn = () => {
     const prevPage = +urlParams.get(URL_KEY.PAGE)
     if (prevPage + 1 > totalPage) return
-    urlParams.set(URL_KEY.PAGE, +prevPage + 1)
-    setUrlParams(urlParams)
+    changeUrl(URL_KEY.PAGE, +prevPage + 1)
   }
   const onClickNumBtn = (btn) => {
-    urlParams.set(URL_KEY.PAGE, +btn.target.id)
-    setUrlParams(urlParams)
+    changeUrl(URL_KEY.PAGE, +btn.target.id)
   }
+
+  const creatNumberBtn = () => {
+    const startNum =
+      Math.floor((page - 1) / pagenationBtnLength) * pagenationBtnLength + 1
+    const endNum = Math.min(startNum + pagenationBtnLength - 1, totalPage)
+    return Array.from({ length: endNum - startNum + 1 }, (_, idx) => (
+      <S.NumBtn
+        key={idx}
+        $urlParamsIdx={page === idx + startNum}
+        id={idx}
+        onClick={(e) => {
+          onClickNumBtn(e)
+        }}
+      >
+        {startNum + idx}
+      </S.NumBtn>
+    ))
+  }
+
   return (
     <S.BtnWrapper>
-      <>
-        <ArrowBtn onClick={onClickStartBtn}>{"<<"}</ArrowBtn>
-        <ArrowBtn onClick={onClickPrevBtn}>{"<"}</ArrowBtn>
-        <S.NumberWrapper>
-          {pageBtn.map((number) => (
-            <S.NumBtn
-              key={number}
-              $urlParamsIdx={+urlParams.get(URL_KEY.PAGE) === number}
-              id={number}
-              onClick={(e) => {
-                onClickNumBtn(e)
-              }}
-            >
-              {number}
-            </S.NumBtn>
-          ))}
-        </S.NumberWrapper>
-        <ArrowBtn onClick={onClickNextBtn}>{">"}</ArrowBtn>
-        <ArrowBtn onClick={onClickEndBtn}>{">>"}</ArrowBtn>
-      </>
+      <ArrowBtn onClick={onClickStartBtn}>{"<<"}</ArrowBtn>
+      <ArrowBtn onClick={onClickPrevBtn}>{"<"}</ArrowBtn>
+      <S.NumberWrapper>{creatNumberBtn()}</S.NumberWrapper>
+      <ArrowBtn onClick={onClickNextBtn}>{">"}</ArrowBtn>
+      <ArrowBtn onClick={onClickEndBtn}>{">>"}</ArrowBtn>
     </S.BtnWrapper>
   )
 }
+
 export default PageNationBtn
+
 const BtnWrapper = styled.div`
   display: flex;
   gap: 10px;
