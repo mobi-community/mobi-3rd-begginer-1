@@ -2,15 +2,34 @@ import React from "react";
 import { styled } from "styled-components";
 import { useSearchParams } from "react-router-dom";
 
-const Pagination = ({
-  TotalPage,
-  goToPrevUnitPage,
-  goToPrevPage,
-  goToNextPage,
-  goToNextUnitPage,
-  goToPage,
-}) => {
+const Pagination = ({ TotalPage, currentPage, setCurrentPage }) => {
   const [searchParams, setSearchParams] = useSearchParams();
+
+  // 특정 페이지로 이동하는 함수
+  const goToPage = (page) => {
+    setCurrentPage(page);
+    setSearchParams({ ...searchParams, page: page });
+  };
+
+  // 이전 페이지로 이동하는 함수
+  const goToPrevPage = () => {
+    goToPage(Math.max(currentPage - 1, 1));
+  };
+
+  // 이전 5개 페이지로 이동하는 함수
+  const goToPrevUnitPage = () => {
+    goToPage(Math.max(currentPage - 5, 1));
+  };
+
+  // 다음 페이지로 이동하는 함수
+  const goToNextPage = () => {
+    goToPage(Math.min(currentPage + 1, TotalPage));
+  };
+
+  // 다음 5개 페이지로 이동하는 함수
+  const goToNextUnitPage = () => {
+    goToPage(Math.min(currentPage + 5, TotalPage));
+  };
 
   const renderPageButtons = () => {
     const pages = [];

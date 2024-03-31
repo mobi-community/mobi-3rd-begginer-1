@@ -4,12 +4,15 @@ import { users as usersData } from "../libs/faker/fakek-user-data";
 import { styled } from "styled-components";
 import Pagination from "./pagination";
 import { useSearchParams } from "react-router-dom";
+import { parsePhone } from "../utils/parse-phone";
+import { handleSelected } from "../utils/handle-selected";
 
 // 테이블 리스트 컴포넌트
 const TableList = () => {
-  const [users, setUsers] = useState([...usersData]);
+  const [users, setUsers] = useState([...usersData]); // user정보
   const [searchParams, setSearchParams] = useSearchParams();
   const viewCount = [20, 50]; // 옵션 : 페이지당 갯수
+  // 페이지당 갯수
   const [perPage, setPerPage] = useState(
     parseInt(searchParams.get("perPage")) || 20
   ); // 페이지당 갯수
@@ -19,53 +22,11 @@ const TableList = () => {
   const TotalPage = Math.ceil(users.length / perPage); // 전체 페이지
   const [sortDirection, setSortDirection] = useState("asc"); // 정렬 방향
 
-  // phoneNumber 가운데 4자리  *로 파싱
-  const parsePhone = (phoneNumber) => {
-    const parseNumber = phoneNumber.substring(4, 8).replace(/\d/g, "*");
-    return `010-${parseNumber}-${phoneNumber.substring(9)}`;
-  };
-
   // perPage 갯수에 따라 페이지네이션에 보여질 페이지의 처음과 끝 index
   const getUsersForPage = (page) => {
     const startIndex = (page - 1) * perPage;
     const endIndex = startIndex + perPage;
     return users.slice(startIndex, endIndex);
-  };
-
-  // selectOption으로 perPage 갯수 설정
-  const handleSelected = (e) => {
-    const perPageValue = parseInt(e.target.value);
-    setPerPage(perPageValue);
-    setSearchParams({ perPage: perPageValue, page: 1 });
-    setCurrentPage(1);
-  };
-
-  // 이전 페이지로 이동하는 함수
-  const goToPrevPage = () => {
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
-    setSearchParams({ ...searchParams, page: currentPage });
-  };
-
-  // 이전 5개 페이지로 이동하는 함수
-  const goToPrevUnitPage = () => {
-    setCurrentPage((prevPage) => Math.max(prevPage - 5, 1));
-    setSearchParams({ ...searchParams, page: currentPage - 5 });
-  };
-
-  // 다음 페이지로 이동하는 함수
-  const goToNextPage = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, TotalPage));
-    setSearchParams({ ...searchParams, page: currentPage });
-  };
-  // 다음 5개 페이지로 이동하는 함수
-  const goToNextUnitPage = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 5, TotalPage));
-    setSearchParams({ ...searchParams, page: currentPage + 5 });
-  };
-  // 특정 페이지로 이동하는 함수
-  const goToPage = (page) => {
-    setCurrentPage(page);
-    setSearchParams({ ...searchParams, page: page });
   };
 
   // userTable 정렬 방법
@@ -75,50 +36,42 @@ const TableList = () => {
     );
   };
 
-  const sortByName = (a, b) => {
+  // key에 따라 문자열 기준으로 정렬
+  const sortByKey = (key) => (a, b) => {
     if (sortDirection === "asc") {
-      return a.fullName.localeCompare(b.fullName);
+      return a[key].localeCompare(b[key]);
     } else {
-      return b.fullName.localeCompare(a.fullName);
+      return b[key].localeCompare(a[key]);
     }
+  };
+
+  // key에 따라 날짜 기준으로 정렬
+  const sortByDate = (key) => (a, b) => {
+    const dateA = new Date(a[key]);
+    const dateB = new Date(b[key]);
+    if (sortDirection === "asc") {
+      return dateA - dateB;
+    } else {
+      return dateB - dateA;
+    }
+  };
+
+  const handleSort = (sortBy) => {
+    const sortedUsers = [...users].sort(sortBy);
+    setUsers(sortedUsers);
+    toggleSortDirection();
   };
 
   const handleSortByName = () => {
-    const sortedUsers = [...users].sort(sortByName);
-    setUsers(sortedUsers);
-    toggleSortDirection();
-  };
-
-  const sortByFormattedBirth = (a, b) => {
-    const dateA = new Date(a.formattedBirth);
-    const dateB = new Date(b.formattedBirth);
-    if (sortDirection === "asc") {
-      return dateA - dateB;
-    } else {
-      return dateB - dateA;
-    }
+    handleSort(sortByKey("fullName"));
   };
 
   const handleSortByFormattedBirth = () => {
-    const sortedUsers = [...users].sort(sortByFormattedBirth);
-    setUsers(sortedUsers);
-    toggleSortDirection();
-  };
-
-  const sortByFormattedLastLogin = (a, b) => {
-    const dateA = new Date(a.formattedLastLogin);
-    const dateB = new Date(b.formattedLastLogin);
-    if (sortDirection === "asc") {
-      return dateA - dateB;
-    } else {
-      return dateB - dateA;
-    }
+    handleSort(sortByDate("formattedBirth"));
   };
 
   const handleSortByFormattedLastLogin = () => {
-    const sortedUsers = [...users].sort(sortByFormattedLastLogin);
-    setUsers(sortedUsers);
-    toggleSortDirection();
+    handleSort(sortByDate("formattedLastLogin"));
   };
 
   return (
@@ -160,11 +113,8 @@ const TableList = () => {
       </S.Table>
       <Pagination
         TotalPage={TotalPage}
-        goToPrevUnitPage={goToPrevUnitPage}
-        goToPrevPage={goToPrevPage}
-        goToNextPage={goToNextPage}
-        goToNextUnitPage={goToNextUnitPage}
-        goToPage={goToPage}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
       />
     </S.Wrapper>
   );
