@@ -15,9 +15,7 @@ function App() {
     const [currentPage, setCurrentPage] = useState(
         page ? parseInt(page, 10) : 1
     );
-    useEffect(() => {
-        navigate(`/users/${currentPage}/${userPerPage}`);
-    }, [currentPage, userPerPage, navigate]);
+
     const indexOfLastUser = userPerPage * currentPage;
     const indexOfFirstUser = indexOfLastUser - userPerPage;
     const currentUserList = userListData.slice(
@@ -92,8 +90,11 @@ function App() {
     const handleSelectChange = (e) => {
         setUserPerPage(parseInt(e.target.value, 10));
         setCurrentPage(1);
-        history.push(`/users/1/${e.target.value}`);
+        navigate.push(`/users/1/${e.target.value}`);
     };
+    useEffect(() => {
+        navigate(`/users/${currentPage}/${userPerPage}`);
+    }, [currentPage, userPerPage, navigate]);
 
     return (
         <div>
