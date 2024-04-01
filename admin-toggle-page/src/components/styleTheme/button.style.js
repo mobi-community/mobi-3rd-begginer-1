@@ -17,11 +17,17 @@ const ButtonColorCss = {
             background-color: ${COLORS.PALLETE.teal.base};
             color: ${COLORS.SYSTEM.black};
         `,
+        activeColor: css`
+            background-color: ${COLORS.MAIN[200]};
+        `,
     },
     green: {
         css: css`
             background-color: ${COLORS.PALLETE.green.base};
             color: ${COLORS.SYSTEM.black};
+        `,
+        activeColor: css`
+            background-color: ${COLORS.MAIN[200]};
         `,
     },
     gray: {
@@ -29,17 +35,26 @@ const ButtonColorCss = {
             background-color: ${COLORS.PALLETE.gray.base};
             color: ${COLORS.SYSTEM.black};
         `,
+        activeColor: css`
+            background-color: ${COLORS.MAIN[200]};
+        `,
     },
     peach: {
         css: css`
             background-color: ${COLORS.PALLETE.peach};
             color: ${COLORS.SYSTEM.black};
         `,
+        activeColor: css`
+            background-color: ${COLORS.MAIN[200]};
+        `,
     },
     lemon: {
         css: css`
             background-color: ${COLORS.PALLETE.lemon};
             color: ${COLORS.SYSTEM.black};
+        `,
+        activeColor: css`
+            background-color: ${COLORS.MAIN[200]};
         `,
     },
 };
@@ -69,10 +84,11 @@ export const StyleBtn = styled.button`
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    ${({ color }) => ButtonColorCss[color].css}
-    ${({ size }) => ButtonSizeCss[size].css}
+    ${({ color }) => ButtonColorCss[color]?.css}
+    ${({ size }) => ButtonSizeCss[size]?.css}
     &:active {
-        background-color: ${({ color }) => ButtonColorCss[color].activeColor};
+        background-color: ${({ color }) =>
+            ButtonColorCss[color]?.activeColor || COLORS.MAIN[200]};
         transform: scale(0.8);
     }
 `;

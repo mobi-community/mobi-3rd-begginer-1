@@ -3,17 +3,17 @@ import Pagenation from "../components/common/pagenation";
 import createUsers from "../utils/user";
 import styled from "styled-components";
 import { useLocation, useSearchParams } from "react-router-dom";
-// import Select from "../components/common/select";
 import { COLORS } from "../designToken/color";
 import Select from "../components/common/select";
 
 const UserPage = () => {
     const [userData, setUserData] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams();
+    const location = useLocation();
+
     const limit = Number(searchParams.get("limit")) || 20; //페이지당 보여줄 데이터 수/ URL에 limit 값이 없으면 기본값 20으로 설정
     const currentPage = Number(searchParams.get("currentPage")) || 1; // 현재 페이지 / URL에 currentPage값 없으면 기본값 1
     const startIndex = (currentPage - 1) * limit; //페이지 시작 인덱스
-    const location = useLocation();
 
     //현재 url의 쿼리 파라미터를 URLSearchParams 객체로 변환
     const urlParams = new URLSearchParams(location.search);
@@ -93,7 +93,7 @@ const UserPage = () => {
                     }
                 ></Select>
                 <Select
-                    value={urlParams?.get("sortOrder")}
+                    value={urlParams?.get("sortOrder") || ""}
                     color="lightPeach"
                     option={sortOrderOptions}
                     onChange={(e) =>
@@ -101,7 +101,7 @@ const UserPage = () => {
                     }
                 ></Select>
                 <Select
-                    value={urlParams?.get("sort")}
+                    value={urlParams?.get("sort") || ""}
                     color="green"
                     option={sortOptions}
                     onChange={(e) => handleSortChange("sort", e.target.value)}
