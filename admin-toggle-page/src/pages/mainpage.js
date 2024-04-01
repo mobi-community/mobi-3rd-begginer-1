@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import UserPage from "./userpage";
+import UserPage from "./userPage";
 
 const MainPage = () => {
     return (
