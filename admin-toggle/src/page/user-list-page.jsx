@@ -26,7 +26,7 @@ const UserListPage = () => {
 
     useEffect(() => {
         // 마운트 시 랜덤한 user data 200개를 새로 만듦
-        setUserData(CreateUserData({ userDataNum: 260 }));
+        setUserData(CreateUserData({ userDataNum: 360 }));
 
         searchParams.set("page", 1);
         setSearchParams(searchParams);

@@ -66,8 +66,6 @@ const Pagination = ({ curPage, setCurPage, userPerPage, userData }) => {
     const nextGroup = () => {
         const nextPageGroup =
             Math.ceil(params / perPageGroup) * perPageGroup + 1;
-        console.log(nextPageGroup, "nextPageGroup");
-        console.log(pageCount, "pageCount");
         if (nextPageGroup <= pageCount) {
             paginate(nextPageGroup);
         }
