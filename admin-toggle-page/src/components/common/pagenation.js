@@ -1,34 +1,51 @@
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+import Button from "./button";
 
-function Pagination({ total, limit, currentPage, setCurrentPage }) {
+function Pagination({ total, limit, currentPage, curParams, setCurParams }) {
     const numPages = Math.ceil(total / limit);
-
+    const [searchParams, setSearchParams] = useSearchParams();
+    // + 일 때와, - 일 때
+    const handlePageChange = (page) => {
+        searchParams.set("currentPage", page);
+        setSearchParams(searchParams);
+    };
     return (
-        <>
-            <Button
-                onClick={() => setCurrentPage(currentPage - 1)}
+        <ButtonWrapper>
+            <Button color="lemon" size="mini" text="&lt;&lt;" />
+            <SButton
+                onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
             >
                 &lt;
-            </Button>
+            </SButton>
             {Array(numPages)
                 .fill()
                 .map((_, i) => (
-                    <Button key={i + 1} onClick={() => setCurrentPage(i + 1)}>
+                    <SButton
+                        key={i + 1}
+                        onClick={() => handlePageChange(i + 1)}
+                    >
                         {i + 1}
-                    </Button>
+                    </SButton>
                 ))}
-            <Button
-                onClick={() => setCurrentPage(currentPage + 1)}
+            <SButton
+                onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === numPages}
             >
                 &gt;
-            </Button>
-        </>
+            </SButton>
+            <Button color="lemon" size="mini" text="&gt;&gt;" />
+        </ButtonWrapper>
     );
 }
-
-const Button = styled.button`
+const ButtonWrapper = styled.div`
+    gap: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+const SButton = styled.button`
     border: none;
     border-radius: 8px;
     padding: 10px;
