@@ -93,7 +93,7 @@ const UserPage = () => {
                     }
                 ></Select>
                 <Select
-                    value={urlParams?.get("sortOrder") || ""}
+                    value={urlParams?.get("sortOrder") || "desc"}
                     color="lightPeach"
                     option={sortOrderOptions}
                     onChange={(e) =>
@@ -101,7 +101,7 @@ const UserPage = () => {
                     }
                 ></Select>
                 <Select
-                    value={urlParams?.get("sort") || ""}
+                    value={urlParams?.get("sort") || "name"}
                     color="green"
                     option={sortOptions}
                     onChange={(e) => handleSortChange("sort", e.target.value)}
