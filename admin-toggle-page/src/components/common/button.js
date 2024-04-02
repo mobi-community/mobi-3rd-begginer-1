@@ -1,8 +1,8 @@
 import { StyleBtn } from "../styleTheme/button.style";
 
-const Button = ({ color, size, text }) => {
+const Button = ({ color, size, text, ...restProps }) => {
     return (
-        <StyleBtn size={size} color={color}>
+        <StyleBtn size={size} color={color} {...restProps}>
             {text}
         </StyleBtn>
     );
