@@ -10,30 +10,30 @@ function Pagination({ total, limit, currentPage, curParams, setCurParams }) {
     const pageParam = searchParams.get("currentPage");
     const buttonRef = useRef([]);
 
-    // + 일 때와, - 일 때
-    const handlePageChange = (page) => {
-        searchParams.set("currentPage", page);
-        setSearchParams(searchParams);
-
-        if (page >= startPageGroup && page <= endPageGroup) {
-            buttonRef.current[page - startPageGroup].focus();
-            console.log(buttonRef.current, "buttonReqf");
-        } else {
-            // 화살표 버튼에 포커스 설정
-            if (page < startPageGroup) {
-                buttonRef.current[0].focus(); // 첫 번째 페이지 번호 버튼
-            } else if (page > endPageGroup) {
-                buttonRef.current[pageGroup - 1].focus(); // 마지막 페이지 번호 버튼
-            }
-        }
-    };
-
     //페이지 그룹 시작 : 1,6,11~
     const startPageGroup =
         Math.floor((pageParam - 1) / pageGroup) * pageGroup + 1;
 
     //페이지 그룹 마지막 번호 :
     const endPageGroup = Math.min(startPageGroup + pageGroup - 1, numPages);
+
+    // + 일 때와, - 일 때
+    const handlePageChange = (page) => {
+        searchParams.set("currentPage", page);
+        setSearchParams(searchParams);
+
+        if (page >= startPageGroup && page <= endPageGroup) {
+            buttonRef.current[page - startPageGroup]?.focus();
+        } else {
+            if (page < startPageGroup) {
+                buttonRef.current[0].focus(); // 첫 번째 페이지 번호 버튼
+                // handlePageChange(startPageGroup);
+            } else if (page > endPageGroup) {
+                buttonRef.current[pageGroup - 1].focus(); // 마지막 페이지 번호 버튼
+                // handlePageChange(endPageGroup);
+            }
+        }
+    };
 
     useEffect(() => {
         if (buttonRef.current.length > 0) {
@@ -46,6 +46,7 @@ function Pagination({ total, limit, currentPage, curParams, setCurParams }) {
             }
         }
     }, [currentPage, startPageGroup, endPageGroup]);
+
     return (
         <ButtonWrapper>
             <Button
@@ -55,7 +56,6 @@ function Pagination({ total, limit, currentPage, curParams, setCurParams }) {
                 // onClick={() => handlePageChange(startPageGroup - pageGroup)}
                 onClick={() => {
                     handlePageChange(startPageGroup - pageGroup);
-                    buttonRef.current[0].focus(); // 첫 번째 페이지 번호 버튼에 포커스 설정
                 }}
                 disabled={startPageGroup === 1}
             />
@@ -63,11 +63,8 @@ function Pagination({ total, limit, currentPage, curParams, setCurParams }) {
                 color="peach"
                 size="mini"
                 text="&lt;"
-                // onClick={() => handlePageChange(currentPage - 1)}
-                onClick={() => {
-                    handlePageChange(currentPage - 1);
-                }}
-                disabled={startPageGroup === 1}
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
             />
             {Array(Math.max(endPageGroup - startPageGroup + 1, 0))
                 .fill()
