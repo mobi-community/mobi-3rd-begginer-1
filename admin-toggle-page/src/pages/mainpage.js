@@ -2,11 +2,7 @@ import styled from "styled-components";
 import UserPage from "./userPage";
 
 const MainPage = () => {
-    return (
-        <MainWrapper>
-            <UserPage />
-        </MainWrapper>
-    );
+    return <MainWrapper>{/* <UserPage /> */}</MainWrapper>;
 };
 export default MainPage;
 

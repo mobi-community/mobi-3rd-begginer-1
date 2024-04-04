@@ -1,16 +1,31 @@
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import Button from "./button";
+import { useEffect, useRef } from "react";
 
 function Pagination({ total, limit, currentPage, curParams, setCurParams }) {
     const numPages = Math.ceil(total / limit);
     const [searchParams, setSearchParams] = useSearchParams();
     const pageGroup = 5;
     const pageParam = searchParams.get("currentPage");
+    const buttonRef = useRef([]);
+
     // + 일 때와, - 일 때
     const handlePageChange = (page) => {
         searchParams.set("currentPage", page);
         setSearchParams(searchParams);
+
+        if (page >= startPageGroup && page <= endPageGroup) {
+            buttonRef.current[page - startPageGroup].focus();
+            console.log(buttonRef.current, "buttonReqf");
+        } else {
+            // 화살표 버튼에 포커스 설정
+            if (page < startPageGroup) {
+                buttonRef.current[0].focus(); // 첫 번째 페이지 번호 버튼
+            } else if (page > endPageGroup) {
+                buttonRef.current[pageGroup - 1].focus(); // 마지막 페이지 번호 버튼
+            }
+        }
     };
 
     //페이지 그룹 시작 : 1,6,11~
@@ -19,29 +34,47 @@ function Pagination({ total, limit, currentPage, curParams, setCurParams }) {
 
     //페이지 그룹 마지막 번호 :
     const endPageGroup = Math.min(startPageGroup + pageGroup - 1, numPages);
-
+    useEffect(() => {
+        if (buttonRef.current.length > 0) {
+            const focusIndex =
+                currentPage >= startPageGroup && currentPage <= endPageGroup
+                    ? currentPage - startPageGroup
+                    : null;
+            if (focusIndex !== null) {
+                buttonRef.current[focusIndex].focus();
+            }
+        }
+    }, [currentPage, startPageGroup, endPageGroup]);
     return (
         <ButtonWrapper>
             <Button
                 color="lemon"
                 size="mini"
                 text="&lt;&lt;"
-                onClick={() => handlePageChange(startPageGroup - pageGroup)}
+                // onClick={() => handlePageChange(startPageGroup - pageGroup)}
+                onClick={() => {
+                    handlePageChange(startPageGroup - pageGroup);
+                    buttonRef.current[0].focus(); // 첫 번째 페이지 번호 버튼에 포커스 설정
+                }}
                 disabled={startPageGroup === 1}
             />
             <Button
                 color="peach"
                 size="mini"
                 text="&lt;"
-                onClick={() => handlePageChange(currentPage - 1)}
+                // onClick={() => handlePageChange(currentPage - 1)}
+                onClick={() => {
+                    handlePageChange(currentPage - 1);
+                }}
                 disabled={startPageGroup === 1}
             />
-            {Array(endPageGroup - startPageGroup + 1)
+            {Array(Math.max(endPageGroup - startPageGroup + 1, 0))
                 .fill()
                 .map((_, i) => {
                     const pageNumber = startPageGroup + i;
                     return (
                         <Button
+                            ref={(el) => (buttonRef.current[i] = el)}
                             color="peach"
                             size="mini"
                             text={pageNumber.toString()}

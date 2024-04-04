@@ -91,4 +91,7 @@ export const StyleBtn = styled.button`
             ButtonColorCss[color]?.activeColor || COLORS.MAIN[200]};
         transform: scale(0.8);
     }
+    &:focus {
+        background-color: ${COLORS.SYSTEM.success};
+    }
 `;
