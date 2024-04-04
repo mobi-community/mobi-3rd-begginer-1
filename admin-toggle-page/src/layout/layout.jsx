@@ -1,3 +1,4 @@
+import SideMenu from "../components/common/sideMenu";
 import Footer from "./footer";
 import Header from "./header";
 
@@ -8,6 +9,7 @@ const RootLayout = () => {
         <>
             <Header />
             <Outlet />
+            <SideMenu />
             <Footer />
         </>
     );
