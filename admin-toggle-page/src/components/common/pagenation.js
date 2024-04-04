@@ -34,6 +34,7 @@ function Pagination({ total, limit, currentPage, curParams, setCurParams }) {
 
     //페이지 그룹 마지막 번호 :
     const endPageGroup = Math.min(startPageGroup + pageGroup - 1, numPages);
+
     useEffect(() => {
         if (buttonRef.current.length > 0) {
             const focusIndex =
