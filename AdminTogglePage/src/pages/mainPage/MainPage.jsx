@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import { creatRandomUserData } from "../../utils/creatRandomUserData"
-import { OptionList, PageNationBtn, UserTable } from "./components"
+import { OptionList, PageNationBtn, SelectBox, UserTable } from "./components"
 import { useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { editUserDataByPerPage } from "../../utils/dataEditor"
@@ -25,7 +25,7 @@ const MainPage = () => {
 
   return (
     <S.CenterWrapper>
-      <OptionList urlParams={urlParams} setUrlParams={setUrlParams} />
+      <SelectBox />
       <UserTable userData={userData} />
       <PageNationBtn
         urlParams={urlParams}

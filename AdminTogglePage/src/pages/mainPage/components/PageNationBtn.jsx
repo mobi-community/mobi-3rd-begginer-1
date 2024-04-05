@@ -45,7 +45,7 @@ const PageNationBtn = ({ totalPageLength, urlParams, setUrlParams }) => {
       <S.NumBtn
         key={idx}
         $urlParamsIdx={page === idx + startNum}
-        id={idx}
+        id={idx + startNum}
         onClick={(e) => {
           onClickNumBtn(e)
         }}

@@ -1,5 +1,5 @@
 import UserTable from "./UserTable"
-import PageNationBtn from "./pageNationBtn"
+import PageNationBtn from "./PageNationBtn"
 import OptionList from "./optionList"
-
-export { UserTable, PageNationBtn, OptionList }
+import SelectBox from "./selectBox"
+export { UserTable, PageNationBtn, OptionList, SelectBox }

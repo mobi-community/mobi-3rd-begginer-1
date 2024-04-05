@@ -105,6 +105,5 @@ export const creatRandomUserData = (numPeople) => {
         loginRecords: creatRandomLastLoginRecords(),
       }
     })
-  console.log(MockData)
   return MockData
 }
